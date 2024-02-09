@@ -36,11 +36,11 @@ const Home = () => {
     
 
     return (
-        <div className="bg-[#0f172b] min-h-screen">
+        <div className="bg-[#0f172b] min-h-screen overflow-x-hidden">
             <div className=" max-w-6xl mx-auto py-10">
-                <h3 className="hover:text-white ease-in-out duration-150 text-5xl text-[#dbb878] text-center font-bold  pb-16">Users List Application</h3>
+                <h3 className="hover:text-white ease-in-out duration-150 text-3xl lg:text-5xl text-[#dbb878] text-center font-bold  pb-16">Users List Application</h3>
 
-                <div className="mb-16 space-y-5">
+                <div className="mb-16 space-y-5 px-10 lg:px-0">
                     {/* search field  */}
                     <form onSubmit={e => e.preventDefault()} className="">
                         <label className="mb-2 text-sm font-medium  sr-only text-white">Search</label>
@@ -66,11 +66,11 @@ const Home = () => {
 
 
 
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-7">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 lg:gap-7">
                     {
                         filteredUsers.map(user =>
                             <Link to={`/user-details/${user?.id}`} key={user?.email} >
-                                <div className="card w-96 bg-[#dbb878] rounded-none hover:border hover:border-gray-300 border-2  hover:scale-110 ease-in-out duration-500 hover:z-20
+                                <div className="card w-[90%] lg:w-96 bg-[#dbb878] rounded-none hover:border hover:border-gray-300 border-2  hover:scale-110 ease-in-out duration-500  mx-auto hover:z-20
                              ">
                                     <figure className="px-5 pt-5 bg-[#0f172b]">
                                         <img src={user?.image} alt="Shoes" className=" w-3/4" />
