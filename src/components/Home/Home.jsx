@@ -17,6 +17,8 @@ const Home = () => {
         company: { name: '' },
         address: {
             address: '',
+            city: '',
+            state: ''
         }
     });
 
@@ -92,6 +94,8 @@ const Home = () => {
                     company: { name: '' },
                     address: {
                         address: '',
+                        city: '',
+                        state: ''
                     }
                 });
                 Swal.fire({
@@ -189,7 +193,25 @@ const Home = () => {
                                     name="address.address"
                                     value={formData.address.address}
                                     onChange={handleInputChange}
-                                    placeholder="Address"
+                                    placeholder="Street"
+                                    className="block w-full p-4 ps-10 text-sm text-white border rounded-lg bg-gray-700 placeholder-gray-400 focus:outline-none border-[#dbb878]"
+                                    required
+                                />
+                                <input
+                                    type="text"
+                                    name="address.city"
+                                    value={formData.address.city}
+                                    onChange={handleInputChange}
+                                    placeholder="City"
+                                    className="block w-full p-4 ps-10 text-sm text-white border rounded-lg bg-gray-700 placeholder-gray-400 focus:outline-none border-[#dbb878]"
+                                    required
+                                />
+                                <input
+                                    type="text"
+                                    name="address.state"
+                                    value={formData.address.state}
+                                    onChange={handleInputChange}
+                                    placeholder="State"
                                     className="block w-full p-4 ps-10 text-sm text-white border rounded-lg bg-gray-700 placeholder-gray-400 focus:outline-none border-[#dbb878]"
                                     required
                                 />
@@ -223,8 +245,9 @@ const Home = () => {
                                         <h2 className="card-title text-lg hover:rotate-3 origin-center"><span className=" hover:text-emerald-800">First Name:</span> {user?.firstName}</h2>
                                         <h2 className="card-title text-lg hover:rotate-3 origin-center"><span className=" hover:text-emerald-800">Last Name: </span> {user?.lastName}</h2>
                                         <h2 className="card-title text-lg hover:rotate-3 origin-center"><span className=" hover:text-emerald-800">Email: </span> {user?.email}</h2>
-                                        <h2 className="card-title text-lg hover:rotate-3 origin-center"><span className=" hover:text-emerald-800">Address: </span> {user?.address?.address}</h2>
                                         <h2 className="card-title text-lg hover:rotate-3 origin-center"><span className=" hover:text-emerald-800">Company Name: </span> {user?.company?.name}</h2>
+                                        <h2 className="card-title text-md hover:rotate-3 origin-center"><span className=" hover:text-emerald-800">Address: </span>  <h1>{user?.address?.address}
+                                            , {user?.address?.city},  {user?.address?.state}</h1></h2>
 
                                     </div>
                                 </div>
