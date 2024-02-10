@@ -1,11 +1,24 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import Swal from "sweetalert2";
 
 
 const Home = () => {
     const [searchInput, setSearchInput] = useState('');
     const [sortOption, setSortOption] = useState('');
     const [users, setUsers] = useState([])
+
+    const [formData, setFormData] = useState({
+        // id: '',
+        image: '',
+        firstName: '',
+        lastName: '',
+        email: '',
+        company: { name: '' },
+        address: {
+            address: '',
+        }
+    });
 
     useEffect(() => {
         fetch('https://dummyjson.com/users')
@@ -25,15 +38,71 @@ const Home = () => {
         user?.firstName.toLowerCase().includes(searchInput.toLowerCase())
     );
 
-     // Sorting based on selected option
-     if (sortOption === 'name') {
+    // Sorting based on selected option
+    if (sortOption === 'name') {
         filteredUsers.sort((a, b) => a.firstName.localeCompare(b.firstName));
     } else if (sortOption === 'email') {
         filteredUsers.sort((a, b) => a.email.localeCompare(b.email));
     } else if (sortOption === 'companyName') {
         filteredUsers.sort((a, b) => a.company?.name.localeCompare(b.company?.name));
     }
-    
+
+
+    // craeting user 
+    const handleInputChange = (e) => {
+        const { name, value } = e.target;
+        // If the input field belongs to a nested object
+        if (name.includes('.')) {
+            const [parent, child] = name.split('.'); // Split the name into parent and child keys
+            setFormData({
+                ...formData,
+                [parent]: {
+                    ...formData[parent], // Spread the parent object
+                    [child]: value // Update the child key with new value
+                }
+            });
+        } else {
+            // If the input field belongs to the main formData object
+            setFormData({
+                ...formData,
+                [name]: value
+            });
+        }
+    };
+
+    const handleFormSubmit = (e) => {
+        e.preventDefault();
+        // POST method to add user with formData
+        fetch('https://dummyjson.com/users/add', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(formData)
+        })
+            .then(res => res.json())
+            .then(data => {
+                // Prepend the newly added user to the existing list
+                setUsers([data, ...users]); // Prepending the new user to the existing list
+                // Reset form data
+                setFormData({
+                    id: '',
+                    image: '',
+                    firstName: '',
+                    lastName: '',
+                    email: '',
+                    company: { name: '' },
+                    address: {
+                        address: '',
+                    }
+                });
+                Swal.fire({
+                    title: "User Created Successfully",
+                    text: "check user list",
+                    icon: "success"
+                });
+            })
+            .catch(error => console.error('Error:', error));
+    };
+    console.log(formData);
 
     return (
         <div className="bg-[#0f172b] min-h-screen overflow-x-hidden">
@@ -62,7 +131,81 @@ const Home = () => {
                         <option value="email">Email</option>
                         <option value="companyName">Company Name</option>
                     </select>
+
+                    {/* Form to add new user */}
+                    <details className="collapse mb-10 bg-gray-700">
+                        <summary className="collapse-title text-xl  font-medium  text-[#dbb878]">
+                            Add User "Click to open/close"
+                        </summary>
+                        <div className="collapse-content">
+                            <form onSubmit={handleFormSubmit} className="space-y-4">
+                                <input
+                                    type="text"
+                                    name="image"
+                                    value={formData.image}
+                                    onChange={handleInputChange}
+                                    placeholder="Image URL"
+                                    className="block w-full p-4 ps-10 text-sm text-white border rounded-lg bg-gray-700 placeholder-gray-400 focus:outline-none border-[#dbb878]"
+                                    required
+                                />
+                                <input
+                                    type="text"
+                                    name="firstName"
+                                    value={formData.firstName}
+                                    onChange={handleInputChange}
+                                    placeholder="First Name"
+                                    className="block w-full p-4 ps-10 text-sm text-white border rounded-lg bg-gray-700 placeholder-gray-400 focus:outline-none border-[#dbb878]"
+                                    required
+                                />
+                                <input
+                                    type="text"
+                                    name="lastName"
+                                    value={formData.lastName}
+                                    onChange={handleInputChange}
+                                    placeholder="Last Name"
+                                    className="block w-full p-4 ps-10 text-sm text-white border rounded-lg bg-gray-700 placeholder-gray-400 focus:outline-none border-[#dbb878]"
+                                    required
+                                />
+                                <input
+                                    type="email"
+                                    name="email"
+                                    value={formData.email}
+                                    onChange={handleInputChange}
+                                    placeholder="Email"
+                                    className="block w-full p-4 ps-10 text-sm text-white border rounded-lg bg-gray-700 placeholder-gray-400 focus:outline-none border-[#dbb878]"
+                                    required
+                                />
+                                <input
+                                    type="text"
+                                    name="company.name"
+                                    value={formData.company.name}
+                                    onChange={handleInputChange}
+                                    placeholder="Company Name"
+                                    className="block w-full p-4 ps-10 text-sm text-white border rounded-lg bg-gray-700 placeholder-gray-400 focus:outline-none border-[#dbb878]"
+                                    required
+                                />
+                                <input
+                                    type="text"
+                                    name="address.address"
+                                    value={formData.address.address}
+                                    onChange={handleInputChange}
+                                    placeholder="Address"
+                                    className="block w-full p-4 ps-10 text-sm text-white border rounded-lg bg-gray-700 placeholder-gray-400 focus:outline-none border-[#dbb878]"
+                                    required
+                                />
+
+                                <button
+                                    type="submit"
+                                    className="w-full text-white bg-orange-700 hover:bg-orange-800 focus:ring-4 focus:outline-none focus:ring-[#dbb878] font-medium rounded-lg text-sm px-4 py-4"
+                                >
+                                    Add User
+                                </button>
+                            </form>
+
+                        </div>
+                    </details>
                 </div>
+
 
 
 
